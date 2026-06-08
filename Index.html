@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>MaintTrack – Maintenance & Change Part System</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --blue:       #2563eb;
+      --blue-dk:    #1d4ed8;
+      --blue-lt:    #eff6ff;
+      --amber:      #d97706;
+      --amber-lt:   #fffbeb;
+      --green:      #059669;
+      --green-lt:   #ecfdf5;
+      --red:        #dc2626;
+      --red-lt:     #fef2f2;
+      --slate-900:  #0f172a;
+      --slate-700:  #334155;
+      --slate-500:  #64748b;
+      --slate-300:  #cbd5e1;
+      --slate-100:  #f1f5f9;
+      --slate-50:   #f8fafc;
+      --white:      #ffffff;
+      --radius:     14px;
+      --radius-sm:  8px;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md:  0 4px 12px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+      --shadow-lg:  0 12px 30px rgba(0,0,0,.12), 0 4px 10px rgba(0,0,0,.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      min-height: 100dvh;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ========= HEADER ========= */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--white);
+      border-bottom: 1px solid var(--slate-100);
+      box-shadow: var(--shadow-sm);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+    }
+    .logo-text h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--slate-900);
+      line-height: 1;
+    }
+    .logo-text p {
+      font-size: 10px;
+      color: var(--slate-500);
+      margin-top: 2px;
+      display: none;
+    }
+    @media (min-width: 480px) { .logo-text p { display: block; } }
+
+    .tab-nav {
+      display: flex;
+      gap: 6px;
+      background: var(--slate-100);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--slate-500);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--blue);
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn i { font-size: 12px; }
+
+    /* ========= MAIN ========= */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    /* ========= HERO BANNER ========= */
+    .hero {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      border-radius: var(--radius);
+      padding: 24px 24px 24px 28px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -20px; bottom: -30px;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,.06);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: 30px; bottom: -60px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,.04);
+      border-radius: 50%;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      color: #93c5fd;
+    }
+    .hero h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(20px, 5vw, 26px);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .hero p {
+      font-size: 13px;
+      color: rgba(255,255,255,.8);
+      margin-top: 6px;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+    .hero-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 80px;
+      color: rgba(255,255,255,.08);
+      pointer-events: none;
+    }
+    @media (max-width: 480px) { .hero-icon { font-size: 50px; right: 12px; } }
+
+    /* ========= STATS ========= */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 14px 12px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .stat-icon.amber { background: var(--amber-lt); color: var(--amber); }
+    .stat-icon.blue  { background: var(--blue-lt);  color: var(--blue);  }
+    .stat-icon.green { background: var(--green-lt); color: var(--green); }
+    .stat-label { font-size: 10px; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; line-height: 1; }
+
+    /* ========= SECTION HEADER ========= */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot {
+      display: inline-flex;
+      position: relative;
+      width: 10px; height: 10px;
+    }
+    .live-dot span:first-child {
+      animation: ping 1.2s ease-in-out infinite;
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #10b981;
+      opacity: .6;
+    }
+    .live-dot span:last-child {
+      position: relative;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      display: block;
+    }
+    @keyframes ping {
+      75%, 100% { transform: scale(2); opacity: 0; }
+    }
+    .badge-pill {
+      background: var(--slate-100);
+      border: 1px solid var(--slate-300);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--slate-500);
+    }
+
+    /* ========= TICKET CARDS (VIEWER) ========= */
+    .tickets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    @media (max-width: 600px) { .tickets-grid { grid-template-columns: 1fr; } }
+
+    .ticket-card {
+      background: var(--white);
+      border: 1.5px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ticket-card:hover {
+      border-color: var(--blue);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .ticket-card:active { transform: translateY(0); }
+
+    .ticket-card-top { display: flex; justify-content: space-between; align-items: center; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid;
+    }
+    .status-menunggu { background: var(--amber-lt); color: var(--amber); border-color: #fde68a; }
+    .status-proses   { background: var(--blue-lt);  color: var(--blue);  border-color: #bfdbfe; }
+    .status-selesai  { background: var(--green-lt); color: var(--green); border-color: #a7f3d0; }
+
+    .log-count { font-size: 11px; color: var(--slate-400); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+    .ticket-machine { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--slate-900); transition: color .15s; }
+    .ticket-card:hover .ticket-machine { color: var(--blue); }
+    .ticket-desc { font-size: 13px; color: var(--slate-500); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 4px; }
+
+    .ticket-card-footer {
+      border-top: 1px solid var(--slate-100);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--slate-400);
+    }
+    .view-link { color: var(--blue); font-weight: 700; display: flex; align-items: center; gap: 4px; font-size: 12px; transition: gap .2s; }
+    .ticket-card:hover .view-link { gap: 7px; }
+
+    /* ========= EMPTY STATE ========= */
+    .empty-state {
+      grid-column: 1 / -1;
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .empty-icon {
+      width: 56px; height: 56px;
+      background: var(--slate-100);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--slate-400);
+      margin: 0 auto 12px;
+    }
+    .empty-state h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .empty-state p { font-size: 13px; color: var(--slate-500); max-width: 320px; margin: 0 auto; }
+
+    /* ========= LOADING ========= */
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 0;
+      color: var(--slate-400);
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .spin { animation: spin 1s linear infinite; font-size: 24px; color: var(--blue); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ========= ADMIN PANEL ========= */
+    .auth-box {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 60px 0;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+    }
+    .card-body { padding: 28px; }
+
+    .auth-icon {
+      width: 56px; height: 56px;
+      background: var(--blue-lt);
+      color: var(--blue);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin: 0 auto 16px;
+    }
+    .auth-box h3 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+    .auth-box p  { font-size: 13px; color: var(--slate-500); text-align: center; margin-bottom: 24px; line-height: 1.5; }
+
+    /* ========= FORM ELEMENTS ========= */
+    label.field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--slate-500);
+      margin-bottom: 6px;
+    }
+    input[type=text], input[type=password], input[type=date], textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--slate-300);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--slate-900);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      background: var(--white);
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    }
+    input[type=password] { text-align: center; letter-spacing: .2em; font-size: 18px; }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    .form-group { margin-bottom: 16px; }
+
+    /* ========= BUTTONS ========= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-primary   { background: var(--blue); color: white; box-shadow: 0 2px 6px rgba(37,99,235,.3); }
+    .btn-primary:hover { background: var(--blue-dk); box-shadow: 0 4px 10px rgba(37,99,235,.35); }
+    .btn-secondary { background: var(--slate-100); color: var(--slate-700); border: 1px solid var(--slate-300); }
+    .btn-secondary:hover { background: var(--slate-200); }
+    .btn-ghost    { background: transparent; color: var(--slate-500); border: 1px solid var(--slate-300); }
+    .btn-ghost:hover { background: var(--slate-100); color: var(--slate-700); }
+    .btn-sm       { padding: 7px 12px; font-size: 12px; }
+    .btn-success  { background: #059669; color: white; }
+    .btn-success:hover { background: #047857; }
+    .btn-danger   { background: var(--red-lt); color: var(--red); border: 1px solid #fecaca; }
+    .btn-danger:hover { background: #fee2e2; }
+    .btn-full     { width: 100%; }
+    .btn i { font-size: 12px; }
+
+    .error-msg { color: var(--red); font-size: 12px; font-weight: 600; text-align: center; margin-top: 8px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* ========= ADMIN DASHBOARD ========= */
+    .admin-welcome {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .admin-welcome-left { display: flex; align-items: center; gap: 14px; }
+    .admin-avatar {
+      width: 44px; height: 44px;
+      background: #fee2e2;
+      color: var(--red);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .admin-welcome h2 { font-size: 16px; font-weight: 700; }
+    .admin-welcome p  { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 900px) {
+      .admin-layout { grid-template-columns: 340px 1fr; }
+    }
+
+    .sticky-form { position: sticky; top: 76px; }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--slate-100);
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header i { color: var(--blue); }
+    .panel-body { padding: 20px; }
+
+    /* ========= ADMIN TICKET ROWS ========= */
+    .admin-ticket {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s;
+    }
+    .admin-ticket:hover { box-shadow: var(--shadow-md); }
+    .admin-ticket + .admin-ticket { margin-top: 10px; }
+
+    .admin-ticket-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .ticket-id-chip {
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      border-radius: 5px;
+      padding: 2px 7px;
+      color: var(--slate-500);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .admin-ticket-machine { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .admin-ticket-desc { font-size: 13px; color: var(--slate-500); margin-top: 3px; line-height: 1.5; }
+    .admin-ticket-meta { font-size: 11px; color: var(--slate-400); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .status-select {
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 7px;
+      border: 1.5px solid var(--slate-300);
+      background: var(--slate-50);
+      cursor: pointer;
+      color: var(--slate-700);
+    }
+
+    .admin-ticket-actions {
+      border-top: 1px solid var(--slate-100);
+      margin-top: 14px;
+      padding-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .action-group { display: flex; gap: 7px; flex-wrap: wrap; }
+
+    /* ========= MODALS ========= */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(15,23,42,.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      align-items: flex-end;
+      justify-content: center;
+    }
+    @media (min-width: 600px) {
+      .modal-overlay { align-items: center; }
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-sheet {
+      background: var(--white);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-height: 92dvh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp .25s ease;
+    }
+    @media (min-width: 600px) {
+      .modal-sheet {
+        border-radius: var(--radius);
+        max-width: 600px;
+        max-height: 88dvh;
+      }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--slate-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      z-index: 1;
+    }
+    .modal-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .modal-title i { color: var(--blue); }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--slate-100);
+      color: var(--slate-500);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all .15s;
+    }
+    .modal-close:hover { background: var(--slate-200); color: var(--slate-900); }
+
+    .modal-body { padding: 20px; }
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--slate-100);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      position: sticky;
+      bottom: 0;
+      background: var(--white);
+    }
+
+    /* ticket info box in modal */
+    .ticket-info-box {
+      background: var(--blue-lt);
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .ticket-info-box h4 { font-size: 15px; font-weight: 700; color: #1e3a8a; }
+    .ticket-info-box p  { font-size: 12px; color: #1d4ed8; margin-top: 3px; }
+
+    /* Timeline */
+    .timeline-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--slate-400); margin-bottom: 16px; }
+    .timeline { position: relative; padding-left: 22px; border-left: 2px solid var(--slate-200); }
+    .timeline-item + .timeline-item { margin-top: 20px; }
+    .timeline-dot {
+      position: absolute;
+      left: -7px;
+      top: 4px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .timeline-dot::after {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+    .timeline-date {
+      display: inline-block;
+      background: var(--blue-lt);
+      border: 1px solid #bfdbfe;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 5px;
+      padding: 2px 8px;
+      margin-bottom: 4px;
+    }
+    .timeline-text { font-size: 13px; color: var(--slate-700); line-height: 1.5; }
+
+    /* ========= TOAST ========= */
+    #toast-container {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+      width: calc(100% - 32px);
+      max-width: 380px;
+    }
+    .toast {
+      background: var(--slate-900);
+      color: white;
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      pointer-events: auto;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .25s;
+      font-size: 13px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast-icon { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+    .toast-icon.success { color: #34d399; }
+    .toast-icon.error   { color: #f87171; }
+    .toast-icon.info    { color: #60a5fa; }
+    .toast-title   { font-weight: 700; line-height: 1.2; }
+    .toast-message { font-size: 11px; color: rgba(255,255,255,.7); margin-top: 2px; }
+
+    /* ========= SECURITY WATERMARK ========= */
+    #watermark-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      font-size: 12px;
+      font-weight: 700;
+      color: #000;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      overflow: hidden;
+      transform: rotate(-15deg) scale(1.2);
+    }
+
+    /* ========= SCREEN SHIELD ========= */
+    #screen-shield {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      backdrop-filter: blur(30px);
+      background: rgba(15,23,42,.92);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 24px;
+    }
+    #screen-shield.show { display: flex; }
+    .shield-icon {
+      width: 72px; height: 72px;
+      background: rgba(220,38,38,.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: #f87171;
+      margin-bottom: 16px;
+    }
+    #screen-shield h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    #screen-shield p  { font-size: 13px; color: rgba(255,255,255,.6); max-width: 320px; line-height: 1.5; }
+
+    /* ========= FOOTER ========= */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--slate-100);
+      padding: 20px 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--slate-400);
+    }
+
+    /* ========= UTILITIES ========= */
+    .hidden { display: none !important; }
+    .divider { height: 1px; background: var(--slate-100); margin: 16px 0; }
+    .mt-1 { margin-top: 4px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .gap-2 { gap: 8px; }
+    .text-sm { font-size: 13px; }
+    .text-xs { font-size: 11px; }
+    .text-muted { color: var(--slate-400); }
+    .font-bold { font-weight: 700; }
+    @media (max-width: 480px) {
+      .hide-mobile { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SECURITY WATERMARK -->
+<div id="watermark-grid"></div>
+
+<!-- SCREEN SHIELD -->
+<div id="screen-shield">
+  <div class="shield-icon"><i class="fa-solid fa-eye-slash"></i></div>
+  <h3>Tampilan Dilindungi</h3>
+  <p>Demi keamanan data operasional, pengambilan tangkapan layar dibatasi pada aplikasi ini.</p>
+  <p style="margin-top:12px;font-size:11px;color:#60a5fa;font-weight:700;letter-spacing:.07em;text-transform:uppercase;">MaintTrack Security Active</p>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon"><i class="fa-solid fa-gears"></i></div>
+      <div class="logo-text">
+        <h1>MaintTrack</h1>
+        <p>Maintenance & Change Part System</p>
+      </div>
+    </div>
+    <nav class="tab-nav">
+      <button id="tab-viewer-btn" class="tab-btn active" onclick="switchTab('viewer')">
+        <i class="fa-solid fa-display"></i>
+        <span>Dashboard</span>
+      </button>
+      <button id="tab-admin-btn" class="tab-btn" onclick="switchTab('admin')">
+        <i class="fa-solid fa-lock"></i>
+        <span>Admin</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- ========================= VIEWER TAB ========================= -->
+  <div id="tab-viewer">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Live Monitoring</span>
+      </div>
+      <h2>Status Perbaikan Mesin</h2>
+      <p>Sistem pelacakan pemeliharaan & penggantian komponen secara real-time. Klik tiket untuk melihat riwayat progres.</p>
+      <i class="fa-solid fa-screwdriver-wrench hero-icon"></i>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div>
+        <div>
+          <div class="stat-label">Menunggu</div>
+          <div class="stat-value" id="stat-menunggu">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><i class="fa-solid fa-spinner spin"></i></div>
+        <div>
+          <div class="stat-label">Proses</div>
+          <div class="stat-value" id="stat-proses">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+          <div class="stat-label">Selesai</div>
+          <div class="stat-value" id="stat-selesai">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active tickets -->
+    <div class="section-head">
+      <div class="section-title">
+        <div class="live-dot"><span></span><span></span></div>
+        Daftar Pemantauan Aktif
+      </div>
+      <div class="badge-pill">Real-Time Sync</div>
+    </div>
+
+    <div class="tickets-grid" id="viewer-tickets-container">
+      <div class="loading-state">
+        <i class="fa-solid fa-circle-notch spin"></i>
+        <span>Menghubungkan ke database...</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================= ADMIN TAB ========================= -->
+  <div id="tab-admin" class="hidden">
+
+    <!-- Auth Screen -->
+    <div id="admin-auth-view" class="auth-box">
+      <div class="card">
+        <div class="card-body">
+          <div class="auth-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>Verifikasi Admin</h3>
+          <p>Masukkan kata sandi administrator untuk mengakses panel pengelolaan tiket perbaikan.</p>
+          <form id="admin-login-form">
+            <div class="form-group">
+              <input type="password" id="admin-password-input" placeholder="Kata Sandi" required autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              Masuk Dashboard
+            </button>
+            <p id="auth-error-msg" class="error-msg">Kata sandi salah. Silakan coba lagi.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard (after login) -->
+    <div id="admin-main-view" class="hidden">
+
+      <div class="admin-welcome">
+        <div class="admin-welcome-left">
+          <div class="admin-avatar"><i class="fa-solid fa-user-gear"></i></div>
+          <div>
+            <h2>Panel Administrator</h2>
+            <p>Kelola tiket perbaikan, ubah status, dan catat progres pengerjaan.</p>
+          </div>
+        </div>
+        <button onclick="logoutAdmin()" class="btn btn-ghost btn-sm">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Keluar</span>
+        </button>
+      </div>
+
+      <div class="admin-layout">
+
+        <!-- Left: New Ticket Form -->
+        <div class="sticky-form">
+          <div class="panel">
+            <div class="panel-header">
+              <i class="fa-solid fa-square-plus"></i>
+              Buat Tiket Perbaikan Baru
+            </div>
+            <div class="panel-body">
+              <form id="new-ticket-form">
+                <div class="form-group">
+                  <label class="field-label">Nama / Kode Mesin</label>
+                  <input type="text" id="machine-name" placeholder="Contoh: CNC-04, Conveyor B" required>
+                </div>
+                <div class="form-group">
+                  <label class="field-label">Deskripsi Kerusakan / Tindakan</label>
+                  <textarea id="repair-detail" rows="3" placeholder="Contoh: Ganti Bearing Motor Utama & Kalibrasi Sumbu Y" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  Simpan & Tayangkan
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Manage Tickets -->
+        <div>
+          <div class="section-head">
+            <div class="section-title">Daftar Tiket Aktif</div>
+            <div class="badge-pill" id="admin-tickets-count">0 Tiket</div>
+          </div>
+          <div id="admin-tickets-container">
+            <div class="loading-state" style="display:flex;">
+              <i class="fa-solid fa-circle-notch spin"></i>
+              <span>Memuat data...</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 MaintTrack App &bull; Hak Cipta Dilindungi</p>
+</footer>
+
+<!-- ========================= MODAL: PROGRESS DETAIL ========================= -->
+<div id="progress-modal" class="modal-overlay" onclick="handleModalOverlayClick(event, 'progress-modal')">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Progres Pekerjaan</div>
+      <button class="modal-close" onclick="closeProgressModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="ticket-info-box">
+        <div>
+          <h4 id="modal-machine-name">—</h4>
+          <p id="modal-repair-detail">—</p>
+        </div>
+        <span id="modal-status-badge" class="status-badge">—</span>
+      </div>
+      <div class="timeline-label">Urutan Progres Pekerjaan</div>
+      <div class="timeline" id="modal-timeline-container">
+        <p class="text-sm text-muted" style="padding-left:8px;">Belum ada catatan progres.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeProgressModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= MODAL: ADD PROGRESS ========================= -->
+<div id="add-progress-modal" class="modal-overlay" onclick="handleModalOverlayClick(event, 'add-progress-modal')">
+  <div class="modal-sheet">
+    <form id="add-progress-form">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-plus-circle"></i> Tambah Catatan Progres</div>
+        <button type="button" class="modal-close" onclick="closeAddProgressModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-muted mt-1" style="margin-bottom:16px;">Catatan progres akan langsung tampil di Dashboard Viewer secara real-time.</p>
+        <input type="hidden" id="add-progress-ticket-id">
+        <div class="form-group">
+          <label class="field-label">Tanggal Pekerjaan</label>
+          <input type="date" id="progress-date" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Deskripsi Tindakan</label>
+          <textarea id="progress-description" rows="4" placeholder="Contoh: Bongkar gearbox, ganti filter pelumas, dsb." required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeAddProgressModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-paper-plane"></i>
+          Simpan Progres
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<!-- ========================= FIREBASE SDK ========================= -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // ==================================================
+  //  KONFIGURASI — isi sesuai project Firebase Anda
+  // ==================================================
+  const ADMIN_PASSWORD = "admin123"; // ← ganti password admin di sini
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBeXWcD97zkDUHTi4OMFo3itz6PEbkNHms",
+  authDomain: "repair-track-a2c0c.firebaseapp.com",
+  projectId: "repair-track-a2c0c",
+  storageBucket: "repair-track-a2c0c.firebasestorage.app",
+  messagingSenderId: "146345408298",
+  appId: "1:146345408298:web:a38b47a5636953c91a1053"
+  };
+  // ==================================================
+
+  // ---- State ----
+  let db, auth;
+  let hasFirebase = false;
+  let isAdminAuth = false;
+  let currentTickets  = [];
+  let currentProgress = [];
+
+  // ---- Init Firebase ----
+  function initFirebase() {
+    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith('ISI_')) {
+      console.warn("Firebase config belum diisi. Mode demo aktif.");
+      return false;
+    }
+    try {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db   = firebase.firestore();
+      return true;
+    } catch (e) {
+      console.error("Firebase init error:", e);
+      return false;
+    }
+  }
+
+  // ---- Collection paths (flat, mudah di-Rules) ----
+  // Path: /mainttrack/tickets_data/tickets/<docId>
+  //       /mainttrack/progress_data/progress/<docId>
+  function ticketsCol()  { return db.collection('mainttrack').doc('tickets_data').collection('tickets'); }
+  function progressCol() { return db.collection('mainttrack').doc('progress_data').collection('progress'); }
+
+  // ---- Firebase Auth (Anonymous) ----
+  async function setupAuth() {
+    if (!hasFirebase) return;
+    try {
+      await auth.signInAnonymously();
+      console.log("Auth anonim berhasil.");
+    } catch (e) {
+      console.error("Auth gagal:", e);
+    }
+  }
+
+  // ---- Realtime listeners ----
+  function startListeners() {
+    if (!hasFirebase || !db) { showPlaceholderData(); return; }
+
+    ticketsCol().onSnapshot(snap => {
+      dbg('Tickets snapshot: ' + snap.size + ' dok ✓', '#34d399');
+      const list = [];
+      snap.forEach(doc => {
+        const d = doc.data();
+        list.push({
+          id: doc.id, ...d,
+          createdAt: d.createdAt?.seconds ? d.createdAt.toDate() : (d.createdAt ? new Date(d.createdAt) : new Date())
+        });
+      });
+      list.sort((a, b) => b.createdAt - a.createdAt);
+      currentTickets = list;
+      renderViewer();
+      renderAdmin();
+      updateStats();
+    }, err => {
+      dbg('TICKETS ERR: ' + err.code, '#f87171');
+      console.error("Tickets listener error:", err);
+    });
+
+    progressCol().onSnapshot(snap => {
+      dbg('Progress snapshot: ' + snap.size + ' dok ✓', '#34d399');
+      const list = [];
+      snap.forEach(doc => {
+        const d = doc.data();
+        list.push({ id: doc.id, ...d });
+      });
+      list.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+      currentProgress = list;
+      const activeTid = document.getElementById('add-progress-ticket-id').value || window._activeModalTicketId;
+      if (activeTid) updateTimelineUI(activeTid);
+    }, err => {
+      dbg('PROGRESS ERR: ' + err.code, '#f87171');
+      console.error("Progress listener error:", err);
+    });
+  }
+
+  // ---- Placeholder demo data ----
+  function showPlaceholderData() {
+    currentTickets = [
+      { id:'d1', namaMesin:'CNC Milling Mori Seiki', namaPerbaikan:'Kalibrasi Sumbu Y & Ganti Ball Screw', status:'Dalam Proses', diKonfirmasi:false, createdAt: new Date(Date.now()-86400000) },
+      { id:'d2', namaMesin:'Injection Moulding Toyo 150T', namaPerbaikan:'Suhu nozzle tidak stabil, ganti Thermocouple', status:'Menunggu', diKonfirmasi:false, createdAt: new Date(Date.now()-43200000) },
+      { id:'d3', namaMesin:'Conveyor Belt Line 3', namaPerbaikan:'Penyambungan ulang belt & bearing roller', status:'Selesai', diKonfirmasi:false, createdAt: new Date(Date.now()-172800000) }
+    ];
+    currentProgress = [
+      { id:'p1', ticketId:'d1', tanggal:'2026-06-04', deskripsiPekerjaan:'Pembongkaran cover sumbu Y & inspeksi ball screw.' },
+      { id:'p2', ticketId:'d1', tanggal:'2026-06-05', deskripsiPekerjaan:'Part ball screw tiba. Teknisi mulai pemasangan bearing baru.' }
+    ];
+    renderViewer(); renderAdmin(); updateStats();
+  }
+
+  // ==================================================
+  //  RENDER
+  // ==================================================
+  function updateStats() {
+    const active = currentTickets.filter(t => !t.diKonfirmasi);
+    document.getElementById('stat-menunggu').textContent = active.filter(t => t.status==='Menunggu').length;
+    document.getElementById('stat-proses').textContent   = active.filter(t => t.status==='Dalam Proses').length;
+    document.getElementById('stat-selesai').textContent  = active.filter(t => t.status==='Selesai').length;
+  }
+
+  function statusBadge(status) {
+    const map = {
+      'Menunggu':    ['status-menunggu','fa-clock-rotate-left'],
+      'Dalam Proses':['status-proses',  'fa-spinner animate-spin'],
+      'Selesai':     ['status-selesai', 'fa-circle-check'],
+    };
+    const [cls, icon] = map[status] || ['status-menunggu','fa-clock'];
+    return `<span class="status-badge ${cls}"><i class="fa-solid ${icon}"></i>${esc(status)}</span>`;
+  }
+
+  function renderViewer() {
+    const c = document.getElementById('viewer-tickets-container');
+    const list = currentTickets.filter(t => !t.diKonfirmasi);
+    if (!list.length) {
+      c.innerHTML = `<div class="empty-state">
+        <div class="empty-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h4>Semua Mesin Beroperasi Normal</h4>
+        <p>Tidak ada tiket pemeliharaan aktif saat ini.</p>
+      </div>`;
+      return;
+    }
+    c.innerHTML = list.map(t => {
+      const pc = currentProgress.filter(p => p.ticketId === t.id).length;
+      return `<div class="ticket-card" onclick="openProgressModal('${t.id}')">
+        <div class="ticket-card-top">
+          ${statusBadge(t.status)}
+          <div class="log-count"><i class="fa-solid fa-timeline"></i>${pc} Log</div>
+        </div>
+        <div>
+          <div class="ticket-machine">${esc(t.namaMesin)}</div>
+          <div class="ticket-desc">${esc(t.namaPerbaikan)}</div>
+        </div>
+        <div class="ticket-card-footer">
+          <span>${formatRelTime(t.createdAt)}</span>
+          <span class="view-link">Lihat Progres <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderAdmin() {
+    const c = document.getElementById('admin-tickets-container');
+    const list = currentTickets.filter(t => !t.diKonfirmasi);
+    document.getElementById('admin-tickets-count').textContent = `${list.length} Tiket Aktif`;
+    if (!list.length) {
+      c.innerHTML = `<div class="empty-state">
+        <div class="empty-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <h4>Tidak ada tiket aktif</h4>
+        <p>Gunakan form di atas untuk menambah tiket baru.</p>
+      </div>`;
+      return;
+    }
+    c.innerHTML = list.map(t => {
+      const pc = currentProgress.filter(p => p.ticketId === t.id).length;
+      const archBtn = t.status === 'Selesai'
+        ? `<button class="btn btn-success btn-sm" onclick="archiveTicket('${t.id}')"><i class="fa-solid fa-box-archive"></i>Konfirmasi & Arsipkan</button>`
+        : '';
+      return `<div class="admin-ticket">
+        <div class="admin-ticket-head">
+          <div>
+            <div class="admin-ticket-machine">
+              <span class="ticket-id-chip">${t.id.substring(0,6).toUpperCase()}</span>
+              ${esc(t.namaMesin)}
+            </div>
+            <div class="admin-ticket-desc">${esc(t.namaPerbaikan)}</div>
+            <div class="admin-ticket-meta">
+              <span>Dibuat: ${t.createdAt.toLocaleString('id-ID')}</span>
+              <span>&bull;</span>
+              <span>Progres: <strong>${pc} entri</strong></span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--slate-400);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">Status</div>
+            <select class="status-select" onchange="updateTicketStatus('${t.id}', this.value)">
+              <option value="Menunggu"     ${t.status==='Menunggu'?'selected':''}>⏳ Menunggu</option>
+              <option value="Dalam Proses" ${t.status==='Dalam Proses'?'selected':''}>🔄 Dalam Proses</option>
+              <option value="Selesai"      ${t.status==='Selesai'?'selected':''}>✅ Selesai</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-ticket-actions">
+          <div class="action-group">
+            <button class="btn btn-sm" style="background:var(--blue-lt);color:var(--blue);border:1px solid #bfdbfe;" onclick="openAddProgressModal('${t.id}')">
+              <i class="fa-solid fa-plus-circle"></i>Tambah Progres
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="openProgressModal('${t.id}')">
+              <i class="fa-solid fa-eye"></i>Riwayat
+            </button>
+          </div>
+          ${archBtn}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ==================================================
+  //  MODALS
+  // ==================================================
+  window._activeModalTicketId = null;
+
+  function openProgressModal(ticketId) {
+    const t = currentTickets.find(t => t.id === ticketId);
+    if (!t) return;
+    window._activeModalTicketId = ticketId;
+    document.getElementById('modal-machine-name').textContent = t.namaMesin;
+    document.getElementById('modal-repair-detail').textContent = t.namaPerbaikan;
+    const badge = document.getElementById('modal-status-badge');
+    badge.textContent = t.status;
+    badge.className = 'status-badge ' + ({'Menunggu':'status-menunggu','Dalam Proses':'status-proses','Selesai':'status-selesai'}[t.status]||'status-menunggu');
+    updateTimelineUI(ticketId);
+    document.getElementById('progress-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProgressModal() {
+    document.getElementById('progress-modal').classList.remove('open');
+    document.body.style.overflow = '';
+    window._activeModalTicketId = null;
+  }
+
+  function openAddProgressModal(ticketId) {
+    document.getElementById('add-progress-ticket-id').value = ticketId;
+    document.getElementById('progress-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('add-progress-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAddProgressModal() {
+    document.getElementById('add-progress-form').reset();
+    document.getElementById('add-progress-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleModalOverlayClick(e, modalId) {
+    if (e.target.id === modalId) {
+      if (modalId === 'progress-modal') closeProgressModal();
+      else closeAddProgressModal();
+    }
+  }
+
+  function updateTimelineUI(ticketId) {
+    const con = document.getElementById('modal-timeline-container');
+    const list = currentProgress.filter(p => p.ticketId === ticketId);
+    if (!list.length) {
+      con.innerHTML = `<p class="text-sm text-muted" style="padding-left:8px;"><i class="fa-solid fa-circle-exclamation" style="margin-right:6px;"></i>Belum ada catatan progres.</p>`;
+      return;
+    }
+    con.innerHTML = list.map(p => {
+      const d = new Date(p.tanggal + 'T00:00:00');
+      const fmt = d.toLocaleDateString('id-ID', { year:'numeric', month:'long', day:'numeric' });
+      return `<div class="timeline-item" style="position:relative;">
+        <div class="timeline-dot"></div>
+        <div style="padding-left:8px;">
+          <div class="timeline-date">${fmt}</div>
+          <div class="timeline-text">${esc(p.deskripsiPekerjaan)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ==================================================
+  //  FIRESTORE OPERATIONS
+  // ==================================================
+  document.getElementById('new-ticket-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const namaMesin      = document.getElementById('machine-name').value.trim();
+    const namaPerbaikan  = document.getElementById('repair-detail').value.trim();
+    if (!namaMesin || !namaPerbaikan) return;
+    const data = { namaMesin, namaPerbaikan, status:'Menunggu', diKonfirmasi:false };
+    if (hasFirebase && db) {
+      try {
+        await ticketsCol().add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        showToast('Tiket Tersimpan', `Tiket untuk ${namaMesin} berhasil ditayangkan.`, 'success');
+      } catch(err) {
+        console.error(err);
+        showToast('Gagal Menyimpan', 'Tiket gagal disimpan ke Firestore.', 'error');
+      }
+    } else {
+      data.id = 'local-' + Math.random().toString(36).slice(2,8);
+      data.createdAt = new Date();
+      currentTickets.unshift(data);
+      renderViewer(); renderAdmin(); updateStats();
+      showToast('Demo Mode', `Tiket ${namaMesin} disimpan lokal.`, 'info');
+    }
+    e.target.reset();
+  });
+
+  async function updateTicketStatus(ticketId, newStatus) {
+    if (hasFirebase && db) {
+      try {
+        await ticketsCol().doc(ticketId).update({ status: newStatus });
+        showToast('Status Diperbarui', `Status diubah ke "${newStatus}".`, 'success');
+      } catch(err) { showToast('Gagal', 'Gagal memperbarui status.', 'error'); }
+    } else {
+      const i = currentTickets.findIndex(t => t.id===ticketId);
+      if (i!==-1) { currentTickets[i].status = newStatus; renderViewer(); renderAdmin(); updateStats(); }
+    }
+  }
+
+  document.getElementById('add-progress-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const ticketId = document.getElementById('add-progress-ticket-id').value;
+    const tanggal  = document.getElementById('progress-date').value;
+    const desc     = document.getElementById('progress-description').value.trim();
+    if (!ticketId || !tanggal || !desc) return;
+    const data = { ticketId, tanggal, deskripsiPekerjaan: desc };
+    if (hasFirebase && db) {
+      try {
+        await progressCol().add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        showToast('Progres Disimpan', 'Catatan progres berhasil ditambahkan.', 'success');
+      } catch(err) { showToast('Gagal', 'Gagal menyimpan progres.', 'error'); }
+    } else {
+      data.id = 'p-local-' + Math.random().toString(36).slice(2,8);
+      currentProgress.unshift(data);
+      currentProgress.sort((a,b) => new Date(b.tanggal)-new Date(a.tanggal));
+      updateTimelineUI(ticketId);
+      showToast('Demo Mode', 'Progres disimpan lokal.', 'info');
+    }
+    closeAddProgressModal();
+  });
+
+  async function archiveTicket(ticketId) {
+    if (hasFirebase && db) {
+      try {
+        await ticketsCol().doc(ticketId).update({ diKonfirmasi: true });
+        showToast('Tiket Diarsipkan', 'Tiket telah dikonfirmasi dan diarsipkan.', 'success');
+      } catch(err) { showToast('Gagal', 'Gagal mengarsipkan tiket.', 'error'); }
+    } else {
+      const i = currentTickets.findIndex(t => t.id===ticketId);
+      if (i!==-1) { currentTickets[i].diKonfirmasi=true; renderViewer(); renderAdmin(); updateStats(); }
+    }
+  }
+
+  // ==================================================
+  //  ADMIN AUTH
+  // ==================================================
+  document.getElementById('admin-login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const pw = document.getElementById('admin-password-input').value;
+    const err = document.getElementById('auth-error-msg');
+    if (pw === ADMIN_PASSWORD) {
+      isAdminAuth = true;
+      localStorage.setItem('maint_admin_session','1');
+      err.classList.remove('show');
+      showToast('Berhasil Masuk', 'Selamat datang di panel administrator.', 'success');
+      checkAdminSession();
+    } else {
+      err.classList.add('show');
+    }
+  });
+
+  function checkAdminSession() {
+    const ok = isAdminAuth || localStorage.getItem('maint_admin_session')==='1';
+    document.getElementById('admin-auth-view').classList.toggle('hidden', ok);
+    document.getElementById('admin-main-view').classList.toggle('hidden', !ok);
+    if (ok) { renderAdmin(); }
+  }
+
+  function logoutAdmin() {
+    isAdminAuth = false;
+    localStorage.removeItem('maint_admin_session');
+    document.getElementById('admin-password-input').value = '';
+    showToast('Keluar', 'Sesi administrator telah diakhiri.', 'info');
+    checkAdminSession();
+  }
+
+  // ==================================================
+  //  TAB NAVIGATION
+  // ==================================================
+  function switchTab(tab) {
+    const isViewer = tab === 'viewer';
+    document.getElementById('tab-viewer').classList.toggle('hidden', !isViewer);
+    document.getElementById('tab-admin').classList.toggle('hidden', isViewer);
+    document.getElementById('tab-viewer-btn').classList.toggle('active', isViewer);
+    document.getElementById('tab-admin-btn').classList.toggle('active', !isViewer);
+    if (!isViewer) checkAdminSession();
+  }
+
+  // ==================================================
+  //  TOAST
+  // ==================================================
+  function showToast(title, msg, type='success') {
+    const c = document.getElementById('toast-container');
+    const el = document.createElement('div');
+    const icons = { success:'fa-circle-check', error:'fa-circle-xmark', info:'fa-circle-info' };
+    el.className = 'toast';
+    el.innerHTML = `<i class="fa-solid ${icons[type]} toast-icon ${type}"></i>
+      <div><div class="toast-title">${title}</div><div class="toast-message">${msg}</div></div>`;
+    c.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    setTimeout(() => { el.classList.remove('show'); setTimeout(()=>el.remove(), 300); }, 4000);
+  }
+
+  // ==================================================
+  //  SECURITY
+  // ==================================================
+  function initSecurity() {
+    // Watermark
+    const grid = document.getElementById('watermark-grid');
+    const uid = 'USR-' + Math.floor(1000+Math.random()*9000);
+    const dt  = new Date().toLocaleDateString('id-ID');
+    for (let i=0; i<50; i++) {
+      const s = document.createElement('span');
+      s.innerHTML = `CONFIDENTIAL &bull; ${uid} &bull; ${dt}`;
+      grid.appendChild(s);
+    }
+    // Blur on focus out
+    const shield = document.getElementById('screen-shield');
+    window.addEventListener('blur', () => shield.classList.add('show'));
+    window.addEventListener('focus', () => shield.classList.remove('show'));
+    // Block right-click
+    document.addEventListener('contextmenu', e => { e.preventDefault(); showToast('Diblokir','Klik kanan tidak diizinkan.','error'); });
+    // Block shortcuts
+    document.addEventListener('keydown', e => {
+      if (e.key==='PrintScreen') { e.preventDefault(); shield.classList.add('show'); setTimeout(()=>shield.classList.remove('show'), 3000); }
+      if ((e.ctrlKey||e.metaKey) && ['c','x','p','s','u'].includes(e.key.toLowerCase())) e.preventDefault();
+      if (e.key==='F12' || ((e.ctrlKey||e.metaKey) && e.shiftKey && ['i','j'].includes(e.key.toLowerCase()))) e.preventDefault();
+    });
+  }
+
+  // ==================================================
+  //  HELPERS
+  // ==================================================
+  function esc(str='') {
+    return String(str).replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  }
+  function formatRelTime(date) {
+    if (!date) return '—';
+    const diff = Date.now() - date;
+    const m = Math.floor(diff/60000), h = Math.floor(diff/3600000);
+    if (m<1) return 'Baru saja';
+    if (m<60) return `${m} menit lalu`;
+    if (h<24) return `${h} jam lalu`;
+    return date.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+  }
+
+  // ==================================================
+  //  DEBUG PANEL (tampil di layar, berguna untuk HP)
+  // ==================================================
+  let _debugVisible = true;
+  function dbg(msg, color) {
+    let el = document.getElementById('_dbg');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = '_dbg';
+      el.style.cssText = [
+        'position:fixed','bottom:70px','left:8px','right:8px',
+        'background:#0f172a','color:#f1f5f9',
+        'font-size:11px','padding:10px 12px','border-radius:10px',
+        'z-index:99999','font-family:monospace','line-height:1.8',
+        'max-height:180px','overflow-y:auto',
+        'border:1px solid #334155','box-shadow:0 4px 20px rgba(0,0,0,.5)'
+      ].join(';');
+      // tombol tutup
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = '✕ Tutup Debug';
+      closeBtn.style.cssText = 'display:block;width:100%;margin-top:8px;padding:5px;background:#1e293b;border:1px solid #475569;border-radius:6px;color:#94a3b8;font-size:10px;cursor:pointer;font-family:monospace;';
+      closeBtn.onclick = () => { el.remove(); _debugVisible = false; };
+      el.appendChild(closeBtn);
+      document.body.appendChild(el);
+    }
+    if (!_debugVisible) return;
+    const line = document.createElement('div');
+    line.style.color = color || '#94a3b8';
+    const time = new Date().toLocaleTimeString('id-ID');
+    line.textContent = `[${time}] ${msg}`;
+    // insert sebelum tombol tutup
+    el.insertBefore(line, el.lastChild);
+    el.scrollTop = 0;
+  }
+
+  // ==================================================
+  //  BOOT
+  // ==================================================
+  let _listenersStarted = false; // guard: cegah listener dipasang dua kali
+
+  window.onload = function() {
+    initSecurity();
+
+    dbg('App dimuat, init Firebase...', '#60a5fa');
+    hasFirebase = initFirebase();
+
+    if (!hasFirebase) {
+      dbg('GAGAL: firebaseConfig kosong → mode demo', '#f87171');
+      showPlaceholderData();
+      return;
+    }
+
+    dbg('Firebase OK, menunggu auth state...', '#fbbf24');
+
+    // onAuthStateChanged sebagai satu-satunya trigger untuk startListeners
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        dbg('Auth OK — UID: ' + user.uid.substring(0, 12) + '...', '#34d399');
+        if (!_listenersStarted) {
+          _listenersStarted = true;
+          dbg('Memasang Firestore listener...', '#60a5fa');
+          startListeners();
+        } else {
+          dbg('Auth dipanggil ulang, listener sudah aktif.', '#94a3b8');
+        }
+      } else {
+        dbg('Belum auth → mencoba signInAnonymously...', '#fbbf24');
+        auth.signInAnonymously()
+          .then(() => dbg('signInAnonymously() terkirim, menunggu callback...', '#34d399'))
+          .catch(err => {
+            dbg('AUTH ERROR: ' + err.code, '#f87171');
+            dbg('Pesan: ' + err.message, '#f87171');
+            showToast('Koneksi Gagal', err.code, 'error');
+            showPlaceholderData();
+          });
+      }
+    });
+  };
+</script>
+
+</body>
+</html>
