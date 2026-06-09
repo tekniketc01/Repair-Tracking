@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>MaintTrack – Maintenance & Change Part System</title>
+  <title>Repair Tracking – Maintenance & Change Part System</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -852,7 +852,7 @@
     <div class="logo">
       <div class="logo-icon"><i class="fa-solid fa-gears"></i></div>
       <div class="logo-text">
-        <h1>MaintTrack</h1>
+        <h1>Repair Tracking</h1>
         <p>Maintenance & Change Part System</p>
       </div>
     </div>
@@ -964,10 +964,16 @@
             <p>Kelola tiket perbaikan, ubah status, dan catat progres pengerjaan.</p>
           </div>
         </div>
-        <button onclick="logoutAdmin()" class="btn btn-ghost btn-sm">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Keluar</span>
-        </button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+          <button onclick="openChangePasswordModal()" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-key"></i>
+            <span>Ganti Password</span>
+          </button>
+          <button onclick="logoutAdmin()" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Keluar</span>
+          </button>
+        </div>
       </div>
 
       <div class="admin-layout">
@@ -1020,7 +1026,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>&copy; 2026 MaintTrack App &bull; Hak Cipta Dilindungi</p>
+  <p>&copy; 2026 Repair Tracking App &bull; Hak Cipta Dilindungi</p>
 </footer>
 
 <!-- ========================= MODAL: PROGRESS DETAIL ========================= -->
@@ -1080,6 +1086,40 @@
   </div>
 </div>
 
+<!-- ========================= MODAL: GANTI PASSWORD ========================= -->
+<div id="change-password-modal" class="modal-overlay" onclick="handleModalOverlayClick(event, 'change-password-modal')">
+  <div class="modal-sheet">
+    <form id="change-password-form">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-key"></i> Ganti Password Admin</div>
+        <button type="button" class="modal-close" onclick="closeChangePasswordModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="field-label">Password Lama</label>
+          <input type="password" id="cp-old" placeholder="Masukkan password saat ini" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="field-label">Password Baru</label>
+          <input type="password" id="cp-new" placeholder="Minimal 6 karakter" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="field-label">Konfirmasi Password Baru</label>
+          <input type="password" id="cp-confirm" placeholder="Ulangi password baru" required autocomplete="off">
+        </div>
+        <p id="cp-error-msg" class="error-msg"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeChangePasswordModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-floppy-disk"></i>
+          Simpan Password
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast-container"></div>
 
@@ -1092,7 +1132,7 @@
   // ==================================================
   //  KONFIGURASI — isi sesuai project Firebase Anda
   // ==================================================
-  const ADMIN_PASSWORD = "admin123"; // ← ganti password admin di sini
+  let ADMIN_PASSWORD = localStorage.getItem('maint_admin_pw') || "admin123"; // password disimpan di localStorage
 
   const firebaseConfig = {
     apiKey: "AIzaSyBeXWcD97zkDUHTi4OMFo3itz6PEbkNHms",
@@ -1150,7 +1190,6 @@
     if (!hasFirebase || !db) { showPlaceholderData(); return; }
 
     ticketsCol().onSnapshot(snap => {
-      dbg('Tickets snapshot: ' + snap.size + ' dok ✓', '#34d399');
       const list = [];
       snap.forEach(doc => {
         const d = doc.data();
@@ -1165,12 +1204,10 @@
       renderAdmin();
       updateStats();
     }, err => {
-      dbg('TICKETS ERR: ' + err.code, '#f87171');
       console.error("Tickets listener error:", err);
     });
 
     progressCol().onSnapshot(snap => {
-      dbg('Progress snapshot: ' + snap.size + ' dok ✓', '#34d399');
       const list = [];
       snap.forEach(doc => {
         const d = doc.data();
@@ -1181,7 +1218,6 @@
       const activeTid = document.getElementById('add-progress-ticket-id').value || window._activeModalTicketId;
       if (activeTid) updateTimelineUI(activeTid);
     }, err => {
-      dbg('PROGRESS ERR: ' + err.code, '#f87171');
       console.error("Progress listener error:", err);
     });
   }
@@ -1226,8 +1262,8 @@
     if (!list.length) {
       c.innerHTML = `<div class="empty-state">
         <div class="empty-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <h4>Semua Mesin Beroperasi Normal</h4>
-        <p>Tidak ada tiket pemeliharaan aktif saat ini.</p>
+        <h4>Tidak ada Perbaikan yang sedang berjalan</h4>
+        <p>Semua mesin beroperasi normal. Tidak ada tiket pemeliharaan aktif saat ini.</p>
       </div>`;
       return;
     }
@@ -1346,7 +1382,8 @@
   function handleModalOverlayClick(e, modalId) {
     if (e.target.id === modalId) {
       if (modalId === 'progress-modal') closeProgressModal();
-      else closeAddProgressModal();
+      else if (modalId === 'add-progress-modal') closeAddProgressModal();
+      else if (modalId === 'change-password-modal') closeChangePasswordModal();
     }
   }
 
@@ -1477,6 +1514,57 @@
   }
 
   // ==================================================
+  //  GANTI PASSWORD
+  // ==================================================
+  function openChangePasswordModal() {
+    document.getElementById('change-password-form').reset();
+    document.getElementById('cp-error-msg').classList.remove('show');
+    document.getElementById('change-password-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeChangePasswordModal() {
+    document.getElementById('change-password-form').reset();
+    document.getElementById('change-password-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('change-password-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const oldPw    = document.getElementById('cp-old').value;
+      const newPw    = document.getElementById('cp-new').value;
+      const confirmPw = document.getElementById('cp-confirm').value;
+      const errEl    = document.getElementById('cp-error-msg');
+
+      // Validasi
+      if (oldPw !== ADMIN_PASSWORD) {
+        errEl.textContent = 'Password lama salah. Silakan coba lagi.';
+        errEl.classList.add('show'); return;
+      }
+      if (newPw.length < 6) {
+        errEl.textContent = 'Password baru minimal 6 karakter.';
+        errEl.classList.add('show'); return;
+      }
+      if (newPw !== confirmPw) {
+        errEl.textContent = 'Konfirmasi password tidak cocok.';
+        errEl.classList.add('show'); return;
+      }
+      if (newPw === oldPw) {
+        errEl.textContent = 'Password baru tidak boleh sama dengan password lama.';
+        errEl.classList.add('show'); return;
+      }
+
+      // Simpan password baru ke localStorage agar persisten
+      ADMIN_PASSWORD = newPw;
+      localStorage.setItem('maint_admin_pw', newPw);
+      errEl.classList.remove('show');
+      closeChangePasswordModal();
+      showToast('Password Diperbarui', 'Password admin berhasil diganti.', 'success');
+    });
+  });
+
+  // ==================================================
   //  TAB NAVIGATION
   // ==================================================
   function switchTab(tab) {
@@ -1546,40 +1634,7 @@
     return date.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
   }
 
-  // ==================================================
-  //  DEBUG PANEL (tampil di layar, berguna untuk HP)
-  // ==================================================
-  let _debugVisible = true;
-  function dbg(msg, color) {
-    let el = document.getElementById('_dbg');
-    if (!el) {
-      el = document.createElement('div');
-      el.id = '_dbg';
-      el.style.cssText = [
-        'position:fixed','bottom:70px','left:8px','right:8px',
-        'background:#0f172a','color:#f1f5f9',
-        'font-size:11px','padding:10px 12px','border-radius:10px',
-        'z-index:99999','font-family:monospace','line-height:1.8',
-        'max-height:180px','overflow-y:auto',
-        'border:1px solid #334155','box-shadow:0 4px 20px rgba(0,0,0,.5)'
-      ].join(';');
-      // tombol tutup
-      const closeBtn = document.createElement('button');
-      closeBtn.textContent = '✕ Tutup Debug';
-      closeBtn.style.cssText = 'display:block;width:100%;margin-top:8px;padding:5px;background:#1e293b;border:1px solid #475569;border-radius:6px;color:#94a3b8;font-size:10px;cursor:pointer;font-family:monospace;';
-      closeBtn.onclick = () => { el.remove(); _debugVisible = false; };
-      el.appendChild(closeBtn);
-      document.body.appendChild(el);
-    }
-    if (!_debugVisible) return;
-    const line = document.createElement('div');
-    line.style.color = color || '#94a3b8';
-    const time = new Date().toLocaleTimeString('id-ID');
-    line.textContent = `[${time}] ${msg}`;
-    // insert sebelum tombol tutup
-    el.insertBefore(line, el.lastChild);
-    el.scrollTop = 0;
-  }
+  // debug panel dihapus
 
   // ==================================================
   //  BOOT
@@ -1589,35 +1644,25 @@
   window.onload = function() {
     initSecurity();
 
-    dbg('App dimuat, init Firebase...', '#60a5fa');
     hasFirebase = initFirebase();
 
     if (!hasFirebase) {
-      dbg('GAGAL: firebaseConfig kosong → mode demo', '#f87171');
       showPlaceholderData();
       return;
     }
 
-    dbg('Firebase OK, menunggu auth state...', '#fbbf24');
-
     // onAuthStateChanged sebagai satu-satunya trigger untuk startListeners
     auth.onAuthStateChanged(user => {
       if (user) {
-        dbg('Auth OK — UID: ' + user.uid.substring(0, 12) + '...', '#34d399');
         if (!_listenersStarted) {
           _listenersStarted = true;
-          dbg('Memasang Firestore listener...', '#60a5fa');
           startListeners();
         } else {
-          dbg('Auth dipanggil ulang, listener sudah aktif.', '#94a3b8');
         }
       } else {
-        dbg('Belum auth → mencoba signInAnonymously...', '#fbbf24');
         auth.signInAnonymously()
-          .then(() => dbg('signInAnonymously() terkirim, menunggu callback...', '#34d399'))
+          .then(() => console.log('signInAnonymously OK'))
           .catch(err => {
-            dbg('AUTH ERROR: ' + err.code, '#f87171');
-            dbg('Pesan: ' + err.message, '#f87171');
             showToast('Koneksi Gagal', err.code, 'error');
             showPlaceholderData();
           });
