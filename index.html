@@ -804,6 +804,147 @@
     #screen-shield h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
     #screen-shield p  { font-size: 13px; color: rgba(255,255,255,.6); max-width: 320px; line-height: 1.5; }
 
+
+    /* ========= HISTORY SUB-TAB ========= */
+    .admin-subtab-nav {
+      display: flex;
+      gap: 4px;
+      background: var(--slate-100);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .admin-subtab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--slate-500);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .admin-subtab-btn.active {
+      background: var(--white);
+      color: var(--blue);
+      box-shadow: var(--shadow-sm);
+    }
+    .admin-subtab-btn i { font-size: 12px; }
+
+    /* History filter bar */
+    .history-filter-bar {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; }
+    .filter-group label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--slate-500); }
+    .filter-group select, .filter-group input[type=month] {
+      padding: 8px 12px;
+      border: 1.5px solid var(--slate-300);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--slate-900);
+      background: var(--white);
+      outline: none;
+      min-width: 140px;
+    }
+    .filter-group select:focus, .filter-group input[type=month]:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    }
+    .filter-actions { display: flex; gap: 8px; margin-left: auto; align-items: flex-end; }
+
+    /* History stats */
+    .history-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .history-stat {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .history-stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--blue); }
+    .history-stat-lbl { font-size: 10px; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+
+    /* History table */
+    .history-table-wrap {
+      background: var(--white);
+      border: 1px solid var(--slate-100);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .history-table thead th {
+      background: var(--slate-50);
+      border-bottom: 1px solid var(--slate-200);
+      padding: 11px 14px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--slate-500);
+      white-space: nowrap;
+    }
+    .history-table tbody tr {
+      border-bottom: 1px solid var(--slate-100);
+      transition: background .1s;
+    }
+    .history-table tbody tr:last-child { border-bottom: none; }
+    .history-table tbody tr:hover { background: var(--slate-50); }
+    .history-table td {
+      padding: 12px 14px;
+      color: var(--slate-700);
+      vertical-align: top;
+    }
+    .history-table td:first-child { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 11px; color: var(--slate-400); white-space: nowrap; }
+    .history-machine-name { font-weight: 700; color: var(--slate-900); }
+    .history-desc { color: var(--slate-500); font-size: 12px; margin-top: 2px; }
+    .history-date { font-size: 11px; color: var(--slate-400); white-space: nowrap; }
+    .history-progres-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--blue-lt);
+      color: var(--blue);
+      border: 1px solid #bfdbfe;
+      border-radius: 20px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Responsive table scroll */
+    .history-table-outer { overflow-x: auto; }
+
     /* ========= FOOTER ========= */
     footer {
       background: var(--white);
@@ -976,49 +1117,130 @@
         </div>
       </div>
 
-      <div class="admin-layout">
+      <!-- Sub-tab navigation -->
+      <div class="admin-subtab-nav">
+        <button class="admin-subtab-btn active" id="subtab-aktif-btn" onclick="switchAdminSubtab('aktif')">
+          <i class="fa-solid fa-list-check"></i>Tiket Aktif
+        </button>
+        <button class="admin-subtab-btn" id="subtab-history-btn" onclick="switchAdminSubtab('history')">
+          <i class="fa-solid fa-clock-rotate-left"></i>History Arsip
+        </button>
+      </div>
 
-        <!-- Left: New Ticket Form -->
-        <div class="sticky-form">
-          <div class="panel">
-            <div class="panel-header">
-              <i class="fa-solid fa-square-plus"></i>
-              Buat Tiket Perbaikan Baru
+      <!-- ===== SUB-TAB: TIKET AKTIF ===== -->
+      <div id="subtab-aktif">
+        <div class="admin-layout">
+
+          <!-- Left: New Ticket Form -->
+          <div class="sticky-form">
+            <div class="panel">
+              <div class="panel-header">
+                <i class="fa-solid fa-square-plus"></i>
+                Buat Tiket Perbaikan Baru
+              </div>
+              <div class="panel-body">
+                <form id="new-ticket-form">
+                  <div class="form-group">
+                    <label class="field-label">Nama / Kode Mesin</label>
+                    <input type="text" id="machine-name" placeholder="Contoh: CNC-04, Conveyor B" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="field-label">Deskripsi Kerusakan / Tindakan</label>
+                    <textarea id="repair-detail" rows="3" placeholder="Contoh: Ganti Bearing Motor Utama & Kalibrasi Sumbu Y" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Simpan & Tayangkan
+                  </button>
+                </form>
+              </div>
             </div>
-            <div class="panel-body">
-              <form id="new-ticket-form">
-                <div class="form-group">
-                  <label class="field-label">Nama / Kode Mesin</label>
-                  <input type="text" id="machine-name" placeholder="Contoh: CNC-04, Conveyor B" required>
-                </div>
-                <div class="form-group">
-                  <label class="field-label">Deskripsi Kerusakan / Tindakan</label>
-                  <textarea id="repair-detail" rows="3" placeholder="Contoh: Ganti Bearing Motor Utama & Kalibrasi Sumbu Y" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-full">
-                  <i class="fa-solid fa-floppy-disk"></i>
-                  Simpan & Tayangkan
-                </button>
-              </form>
+          </div>
+
+          <!-- Right: Manage Tickets -->
+          <div>
+            <div class="section-head">
+              <div class="section-title">Daftar Tiket Aktif</div>
+              <div class="badge-pill" id="admin-tickets-count">0 Tiket</div>
             </div>
+            <div id="admin-tickets-container">
+              <div class="loading-state" style="display:flex;">
+                <i class="fa-solid fa-circle-notch spin"></i>
+                <span>Memuat data...</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== SUB-TAB: HISTORY ===== -->
+      <div id="subtab-history" class="hidden">
+
+        <!-- Filter bar -->
+        <div class="history-filter-bar">
+          <div class="filter-group">
+            <label><i class="fa-solid fa-calendar"></i> Filter Bulan</label>
+            <input type="month" id="history-month-filter" onchange="renderHistory()">
+          </div>
+          <div class="filter-group">
+            <label><i class="fa-solid fa-magnifying-glass"></i> Cari Mesin</label>
+            <input type="text" id="history-search" placeholder="Nama mesin..." oninput="renderHistory()"
+              style="padding:8px 12px;border:1.5px solid var(--slate-300);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;min-width:160px;">
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-ghost btn-sm" onclick="resetHistoryFilter()">
+              <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+            <button class="btn btn-success btn-sm" onclick="downloadHistoryXLS()">
+              <i class="fa-solid fa-file-excel"></i> Download XLS
+            </button>
           </div>
         </div>
 
-        <!-- Right: Manage Tickets -->
-        <div>
-          <div class="section-head">
-            <div class="section-title">Daftar Tiket Aktif</div>
-            <div class="badge-pill" id="admin-tickets-count">0 Tiket</div>
+        <!-- Summary stats -->
+        <div class="history-stats">
+          <div class="history-stat">
+            <div class="history-stat-val" id="hist-total">0</div>
+            <div class="history-stat-lbl">Total Tiket</div>
           </div>
-          <div id="admin-tickets-container">
-            <div class="loading-state" style="display:flex;">
-              <i class="fa-solid fa-circle-notch spin"></i>
-              <span>Memuat data...</span>
-            </div>
+          <div class="history-stat">
+            <div class="history-stat-val" id="hist-mesin">0</div>
+            <div class="history-stat-lbl">Mesin Unik</div>
+          </div>
+          <div class="history-stat">
+            <div class="history-stat-val" id="hist-progres">0</div>
+            <div class="history-stat-lbl">Total Progres</div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="history-table-wrap">
+          <div class="history-table-outer">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Mesin</th>
+                  <th>Deskripsi Perbaikan</th>
+                  <th>Tgl Dibuat</th>
+                  <th>Tgl Selesai</th>
+                  <th>Tgl Konfirmasi</th>
+                  <th>Progres</th>
+                  <th style="text-align:center;">Hapus</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--slate-400);">
+                  <i class="fa-solid fa-circle-notch spin" style="margin-right:8px;"></i>Memuat data...
+                </td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
       </div>
+
     </div>
   </div>
 
@@ -1135,12 +1357,12 @@
   let ADMIN_PASSWORD = localStorage.getItem('maint_admin_pw') || "admin123"; // password disimpan di localStorage
 
   const firebaseConfig = {
-    apiKey: "AIzaSyBeXWcD97zkDUHTi4OMFo3itz6PEbkNHms",
-  authDomain: "repair-track-a2c0c.firebaseapp.com",
-  projectId: "repair-track-a2c0c",
-  storageBucket: "repair-track-a2c0c.firebasestorage.app",
-  messagingSenderId: "146345408298",
-  appId: "1:146345408298:web:a38b47a5636953c91a1053"
+    apiKey: "AIzaSyAsoOHUyN3k_biwRaS4Chc8B1CK3LQL2jQ",
+  authDomain: "repair-tracking-etc.firebaseapp.com",
+  projectId: "repair-tracking-etc",
+  storageBucket: "repair-tracking-etc.firebasestorage.app",
+  messagingSenderId: "1030105452978",
+  appId: "1:1030105452978:web:35fde24ab896b51f4794ab"
   };
   // ==================================================
 
@@ -1203,6 +1425,7 @@
       renderViewer();
       renderAdmin();
       updateStats();
+      renderHistory();
     }, err => {
       console.error("Tickets listener error:", err);
     });
@@ -1334,6 +1557,9 @@
             <button class="btn btn-ghost btn-sm" onclick="openProgressModal('${t.id}')">
               <i class="fa-solid fa-eye"></i>Riwayat
             </button>
+            <button class="btn btn-sm" style="background:var(--red-lt);color:var(--red);border:1px solid #fecaca;" onclick="deleteTicket('${t.id}')">
+              <i class="fa-solid fa-trash"></i>Hapus
+            </button>
           </div>
           ${archBtn}
         </div>
@@ -1439,7 +1665,10 @@
       try {
         await ticketsCol().doc(ticketId).update({ status: newStatus });
         showToast('Status Diperbarui', `Status diubah ke "${newStatus}".`, 'success');
-      } catch(err) { showToast('Gagal', 'Gagal memperbarui status.', 'error'); }
+      } catch(err) {
+        console.error('Update status error:', err);
+        showToast('Gagal', 'Gagal memperbarui status: ' + (err.message || err.code || 'unknown error'), 'error');
+      }
     } else {
       const i = currentTickets.findIndex(t => t.id===ticketId);
       if (i!==-1) { currentTickets[i].status = newStatus; renderViewer(); renderAdmin(); updateStats(); }
@@ -1469,15 +1698,327 @@
   });
 
   async function archiveTicket(ticketId) {
+    const now = new Date();
+    const tglKonfirmasi = now.toISOString();
     if (hasFirebase && db) {
       try {
-        await ticketsCol().doc(ticketId).update({ diKonfirmasi: true });
+        await ticketsCol().doc(ticketId).update({
+          diKonfirmasi: true,
+          tanggalKonfirmasi: firebase.firestore.FieldValue.serverTimestamp(),
+          tanggalKonfirmasiISO: tglKonfirmasi
+        });
         showToast('Tiket Diarsipkan', 'Tiket telah dikonfirmasi dan diarsipkan.', 'success');
       } catch(err) { showToast('Gagal', 'Gagal mengarsipkan tiket.', 'error'); }
     } else {
       const i = currentTickets.findIndex(t => t.id===ticketId);
-      if (i!==-1) { currentTickets[i].diKonfirmasi=true; renderViewer(); renderAdmin(); updateStats(); }
+      if (i!==-1) {
+        currentTickets[i].diKonfirmasi = true;
+        currentTickets[i].tanggalKonfirmasiISO = tglKonfirmasi;
+        renderViewer(); renderAdmin(); updateStats(); renderHistory();
+      }
     }
+  }
+
+  async function deleteTicket(ticketId) {
+    if (!confirm('Hapus tiket ini secara permanen? Semua data progres terkait juga akan terhapus dan tidak dapat dipulihkan.')) return;
+    if (hasFirebase && db) {
+      try {
+        const progressSnap = await progressCol().where('ticketId', '==', ticketId).get();
+        const batch = db.batch();
+        progressSnap.forEach(doc => batch.delete(doc.ref));
+        batch.delete(ticketsCol().doc(ticketId));
+        await batch.commit();
+        showToast('Tiket Dihapus', 'Tiket dan semua progresnya telah dihapus permanen.', 'success');
+      } catch(err) {
+        console.error('Delete ticket error:', err);
+        showToast('Gagal', 'Gagal menghapus tiket: ' + (err.message || err.code || 'unknown error'), 'error');
+      }
+    } else {
+      const i = currentTickets.findIndex(t => t.id === ticketId);
+      if (i !== -1) {
+        currentTickets.splice(i, 1);
+        currentProgress = currentProgress.filter(p => p.ticketId !== ticketId);
+        renderViewer(); renderAdmin(); updateStats();
+        showToast('Tiket Dihapus', 'Tiket dihapus (mode demo).', 'success');
+      }
+    }
+  }
+
+  async function deleteArchivedTicket(ticketId) {
+    if (!confirm('Hapus tiket ini dari arsip secara permanen? Data tidak dapat dipulihkan.')) return;
+    if (hasFirebase && db) {
+      try {
+        // Hapus semua progress terkait dulu
+        const progressSnap = await progressCol().where('ticketId', '==', ticketId).get();
+        const batch = db.batch();
+        progressSnap.forEach(doc => batch.delete(doc.ref));
+        batch.delete(ticketsCol().doc(ticketId));
+        await batch.commit();
+        showToast('Tiket Dihapus', 'Tiket dan semua progresnya telah dihapus permanen.', 'success');
+      } catch(err) {
+        console.error(err);
+        showToast('Gagal', 'Gagal menghapus tiket: ' + err.message, 'error');
+      }
+    } else {
+      // Mode demo
+      const i = currentTickets.findIndex(t => t.id === ticketId);
+      if (i !== -1) {
+        currentTickets.splice(i, 1);
+        currentProgress = currentProgress.filter(p => p.ticketId !== ticketId);
+        renderHistory(); renderViewer(); renderAdmin(); updateStats();
+        showToast('Tiket Dihapus', 'Tiket dihapus (mode demo).', 'success');
+      }
+    }
+  }
+
+
+  // ==================================================
+  //  ADMIN SUB-TAB
+  // ==================================================
+  function switchAdminSubtab(tab) {
+    const isAktif = tab === 'aktif';
+    document.getElementById('subtab-aktif').classList.toggle('hidden', !isAktif);
+    document.getElementById('subtab-history').classList.toggle('hidden', isAktif);
+    document.getElementById('subtab-aktif-btn').classList.toggle('active', isAktif);
+    document.getElementById('subtab-history-btn').classList.toggle('active', !isAktif);
+    if (!isAktif) {
+      // Set default bulan = bulan ini jika belum diisi
+      const mf = document.getElementById('history-month-filter');
+      if (!mf.value) {
+        const now = new Date();
+        mf.value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+      }
+      renderHistory();
+    }
+  }
+
+  // ==================================================
+  //  HISTORY RENDER
+  // ==================================================
+  function getFilteredHistory() {
+    const monthVal = document.getElementById('history-month-filter').value; // "YYYY-MM" or ""
+    const search   = (document.getElementById('history-search').value || '').toLowerCase().trim();
+
+    let list = currentTickets.filter(t => t.diKonfirmasi === true);
+
+    // Filter bulan berdasarkan tanggalKonfirmasi (jika ada), fallback ke createdAt
+    if (monthVal) {
+      const [fy, fm] = monthVal.split('-').map(Number);
+      list = list.filter(t => {
+        let d;
+        if (t.tanggalKonfirmasiISO) {
+          d = new Date(t.tanggalKonfirmasiISO);
+        } else if (t.tanggalKonfirmasi?.seconds) {
+          d = new Date(t.tanggalKonfirmasi.seconds * 1000);
+        } else {
+          d = t.createdAt instanceof Date ? t.createdAt : new Date(t.createdAt);
+        }
+        return d.getFullYear() === fy && (d.getMonth()+1) === fm;
+      });
+    }
+
+    // Filter pencarian mesin
+    if (search) {
+      list = list.filter(t =>
+        t.namaMesin.toLowerCase().includes(search) ||
+        t.namaPerbaikan.toLowerCase().includes(search)
+      );
+    }
+
+    // Urutkan terbaru dulu
+    list.sort((a, b) => b.createdAt - a.createdAt);
+    return list;
+  }
+
+  function renderHistory() {
+    const list = getFilteredHistory();
+    const tbody = document.getElementById('history-table-body');
+
+    // Update stats
+    const mesinSet = new Set(list.map(t => t.namaMesin));
+    const totalProgres = list.reduce((sum, t) => sum + currentProgress.filter(p => p.ticketId === t.id).length, 0);
+    document.getElementById('hist-total').textContent   = list.length;
+    document.getElementById('hist-mesin').textContent   = mesinSet.size;
+    document.getElementById('hist-progres').textContent = totalProgres;
+
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--slate-400);">
+        <i class="fa-solid fa-box-open" style="font-size:24px;margin-bottom:8px;display:block;"></i>
+        Tidak ada data arsip untuk filter ini.
+      </td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = list.map((t, i) => {
+      const pc = currentProgress.filter(p => p.ticketId === t.id);
+      const tglDibuat = t.createdAt instanceof Date
+        ? t.createdAt.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})
+        : '—';
+
+      // Tanggal selesai = tanggal progres terakhir (paling baru)
+      const progresTicket = pc.slice().sort((a,b) => new Date(b.tanggal) - new Date(a.tanggal));
+      const tglSelesai = progresTicket.length
+        ? new Date(progresTicket[0].tanggal + 'T00:00:00').toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})
+        : '—';
+
+      // Tanggal konfirmasi
+      let tglKonfirmasi = '—';
+      if (t.tanggalKonfirmasiISO) {
+        tglKonfirmasi = new Date(t.tanggalKonfirmasiISO).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+      } else if (t.tanggalKonfirmasi?.seconds) {
+        tglKonfirmasi = new Date(t.tanggalKonfirmasi.seconds * 1000).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+      }
+
+      const progresHtml = pc.length
+        ? `<span class="history-progres-count"><i class="fa-solid fa-timeline"></i>${pc.length} entri</span>`
+        : `<span style="color:var(--slate-300);font-size:11px;">–</span>`;
+
+      return `<tr>
+        <td>${i+1}</td>
+        <td><div class="history-machine-name">${esc(t.namaMesin)}</div></td>
+        <td><div>${esc(t.namaPerbaikan)}</div></td>
+        <td><div class="history-date">${tglDibuat}</div></td>
+        <td><div class="history-date">${tglSelesai}</div></td>
+        <td><div class="history-date" style="color:var(--green);font-weight:600;">${tglKonfirmasi}</div></td>
+        <td>${progresHtml}</td>
+        <td style="text-align:center;">
+          <button class="btn btn-danger btn-sm" onclick="deleteArchivedTicket('${t.id}')" title="Hapus permanen">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function resetHistoryFilter() {
+    const now = new Date();
+    document.getElementById('history-month-filter').value =
+      now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+    document.getElementById('history-search').value = '';
+    renderHistory();
+  }
+
+  // ==================================================
+  //  DOWNLOAD XLS (format CSV dengan BOM untuk Excel)
+  // ==================================================
+  function downloadHistoryXLS() {
+    const list = getFilteredHistory();
+    if (!list.length) {
+      showToast('Data Kosong', 'Tidak ada data untuk diunduh pada filter ini.', 'info');
+      return;
+    }
+
+    const monthVal = document.getElementById('history-month-filter').value;
+    let namaFile = 'History-Perbaikan';
+    if (monthVal) {
+      const [fy, fm] = monthVal.split('-');
+      const namaBulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      namaFile += '-' + namaBulan[parseInt(fm)-1] + '-' + fy;
+    }
+    namaFile += '.xls';
+
+    // Build XLS (HTML table format yang bisa dibuka Excel)
+    const namaBulanFull = ['Januari','Februari','Maret','April','Mei','Juni',
+                           'Juli','Agustus','September','Oktober','November','Desember'];
+    let judulBulan = 'Semua Bulan';
+    if (monthVal) {
+      const [fy, fm] = monthVal.split('-');
+      judulBulan = namaBulanFull[parseInt(fm)-1] + ' ' + fy;
+    }
+
+    const rows = list.map((t, i) => {
+      const tglDibuat = t.createdAt instanceof Date
+        ? t.createdAt.toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'})
+        : '—';
+      const pc = currentProgress.filter(p => p.ticketId === t.id);
+
+      // Tgl selesai = progres terakhir
+      const progresSort = pc.slice().sort((a,b) => new Date(b.tanggal) - new Date(a.tanggal));
+      const tglSelesaiXLS = progresSort.length
+        ? new Date(progresSort[0].tanggal + 'T00:00:00').toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'})
+        : '—';
+
+      // Tgl konfirmasi
+      let tglKonfirmasiXLS = '—';
+      if (t.tanggalKonfirmasiISO) {
+        tglKonfirmasiXLS = new Date(t.tanggalKonfirmasiISO).toLocaleString('id-ID', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
+      } else if (t.tanggalKonfirmasi?.seconds) {
+        tglKonfirmasiXLS = new Date(t.tanggalKonfirmasi.seconds * 1000).toLocaleString('id-ID', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
+      }
+
+      const progresText = pc.length
+        ? pc.map((p, pi) => {
+            const dp = new Date(p.tanggal + 'T00:00:00');
+            const tglP = dp.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
+            return `[${pi+1}] ${tglP}: ${p.deskripsiPekerjaan}`;
+          }).join(' | ')
+        : '–';
+
+      return `<tr>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center;">${i+1}</td>
+        <td style="border:1px solid #ccc;padding:6px;">${escXLS(t.namaMesin)}</td>
+        <td style="border:1px solid #ccc;padding:6px;">${escXLS(t.namaPerbaikan)}</td>
+        <td style="border:1px solid #ccc;padding:6px;white-space:nowrap;">${tglDibuat}</td>
+        <td style="border:1px solid #ccc;padding:6px;white-space:nowrap;">${tglSelesaiXLS}</td>
+        <td style="border:1px solid #ccc;padding:6px;white-space:nowrap;color:#059669;font-weight:bold;">${tglKonfirmasiXLS}</td>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center;">${pc.length}</td>
+        <td style="border:1px solid #ccc;padding:6px;max-width:400px;">${escXLS(progresText)}</td>
+      </tr>`;
+    }).join('');
+
+    const xlsContent = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:x="urn:schemas-microsoft-com:office:excel"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="UTF-8">
+  <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>
+  <x:ExcelWorksheet><x:Name>History Perbaikan</x:Name>
+  <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+  </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+</head>
+<body>
+<table style="border-collapse:collapse;font-family:Calibri,Arial;font-size:11pt;">
+  <tr>
+    <td colspan="8" style="padding:10px;font-size:14pt;font-weight:bold;background:#1e40af;color:white;border:1px solid #1e40af;">
+      LAPORAN HISTORY PERBAIKAN MESIN
+    </td>
+  </tr>
+  <tr>
+    <td colspan="8" style="padding:6px;font-size:10pt;color:#64748b;border:1px solid #e2e8f0;">
+      Periode: ${judulBulan} &nbsp;|&nbsp; Total: ${list.length} tiket &nbsp;|&nbsp; Dicetak: ${new Date().toLocaleDateString('id-ID', {day:'2-digit',month:'long',year:'numeric'})}
+    </td>
+  </tr>
+  <tr style="background:#f1f5f9;">
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;text-align:center;white-space:nowrap;">No</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;white-space:nowrap;">Nama Mesin</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;">Deskripsi Perbaikan</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;white-space:nowrap;">Tgl Dibuat</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;white-space:nowrap;">Tgl Selesai</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;white-space:nowrap;">Tgl Konfirmasi</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;text-align:center;white-space:nowrap;">Jml Progres</th>
+    <th style="border:1px solid #ccc;padding:8px;font-weight:bold;">Catatan Progres</th>
+  </tr>
+  ${rows}
+</table>
+</body></html>`;
+
+    // BOM untuk UTF-8 agar Excel baca karakter Indonesia dengan benar
+    const bom = '﻿';
+    const blob = new Blob([bom + xlsContent], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = namaFile;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Download Berhasil', `${list.length} tiket diexport ke ${namaFile}`, 'success');
+  }
+
+  function escXLS(str='') {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   // ==================================================
@@ -1502,7 +2043,7 @@
     const ok = isAdminAuth || localStorage.getItem('maint_admin_session')==='1';
     document.getElementById('admin-auth-view').classList.toggle('hidden', ok);
     document.getElementById('admin-main-view').classList.toggle('hidden', !ok);
-    if (ok) { renderAdmin(); }
+    if (ok) { renderAdmin(); renderHistory(); }
   }
 
   function logoutAdmin() {
